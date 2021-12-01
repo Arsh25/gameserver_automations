@@ -13,8 +13,10 @@ jobs:
         uses: shimataro/ssh-key-action@v2
         with:
           key: ${{secrets.SATISFACTORY_PRIVATE_KEY}}}
-          known_hosts: ${{secrets.SATISFACTORY_HOST_SIG}}}
+          known_hosts: fake-key
           name: id_rsa
+      - name: Add Real host key
+        run: ssh-keyscan -H ${{ secrets.SATISFACTORY_HOST }} >> ~/.ssh/known_hosts
       - name: Copy Save Files
         run: rsync -e "ssh -i ~/.ssh/id_rsa" -a github-backups@${{secrets.SATISFACTORY_HOST}}:/home/satisfactory/config/saves /tmp/satisfactory
       - name: Save File SHA256 Hashes
