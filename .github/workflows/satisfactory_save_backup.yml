@@ -20,7 +20,7 @@ jobs:
       - name: Copy Save Files
         run: rsync -e "ssh -i ~/.ssh/id_rsa" -a github-backups@${{secrets.SATISFACTORY_HOST}}:/home/satisfactory/config/saves /tmp/satisfactory
       - name: Save File SHA256 Hashes
-        run: sha256sum /tmp/satisfactory/* > /tmp/satisfactory/save_hashes.txt
+        run: sha256sum /tmp/satisfactory/saves/* > /tmp/satisfactory/save_hashes.txt
       - name: Create Artifact
         uses: actions/upload-artifact@v2
         with:
