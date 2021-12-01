@@ -9,8 +9,10 @@ jobs:
   copy-files-from-server:
     runs-on: ubuntu-latest
     steps:
+      - name: Create SSH directory
+        run: mkdir ~/.ssh
       - name: Install SSH Key
-        run: echo "${{secrets.SATISFACTORY_PRIVATE_KEY}}" >> ~/.ssh/id_rsa
+        run: echo "${{secrets.SATISFACTORY_PRIVATE_KEY}}" > ~/.ssh/id_rsa
       - name: Add Host key
         run: ssh-keyscan -H ${{ secrets.SATISFACTORY_HOST }} >> ~/.ssh/known_hosts
       - name: Copy Save Files
