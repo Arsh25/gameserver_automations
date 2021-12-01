@@ -1,4 +1,4 @@
-name: Backup Satisfacotory Saves
+name: Backup Satisfactory Saves
 on: 
   schedule:
     - cron: '5 * * * *'
@@ -13,7 +13,7 @@ jobs:
           known_hosts: ${{secrets.SATISFACTORY_HOST_SIG}}}
           name: id_rsa
       - name: Copy Save Files
-        run: rsync -e "ssh -i ~/.ssh/id_rsa" -a github-backups@{{secrets.SATISFACTORY_HOST}}:/home/satisfactory/config/saves /tmp/satisfactory
+        run: rsync -e "ssh -i ~/.ssh/id_rsa" -a github-backups@${{secrets.SATISFACTORY_HOST}}:/home/satisfactory/config/saves /tmp/satisfactory
       - name: Save File SHA256 Hashes
         run: sha256sum /tmp/satisfactory/* > /tmp/satisfactory/save_hashes.txt
       - name: Create Artifact
