@@ -1,0 +1,47 @@
+#cloud-config
+
+---
+users:
+  - name: github-backups
+  - name: satisfactory
+groups:
+  - backups: [github-backups]
+
+write_files:
+  - content: |
+      version: '3'
+      services:
+        satisfactory-server:
+          container_name: 'satisfactory-server'
+          hostname: 'satisfactory-server'
+          image: 'wolveix/satisfactory-server:latest'
+          ports:
+              - '7777:7777/udp'
+              - '15000:15000/udp'
+              - '15777:15777/udp'
+          volumes:
+              - './config:/config'
+          environment:
+              - MAXPLAYERS=8
+              - PGID=1002
+              - PUID=1001
+              - STEAMBETA=false
+          restart: unless-stopped
+    owner: satisfactory:satisfactory
+    path: /home/satisfactory/docker-compose.yml
+    permissions: '0755'
+
+# Allow Satisfactory ports through the UFW firewall. 
+# The DigitalOcean Docker Image needs this
+runcmd:
+  - [mkdir, /home/satisfactory/config]
+  - [chown, -R, satisfactory:satisfactory, /home/satisfactory/]
+  - [ufw, allow, 7777/udp]
+  - [ufw, allow, 15000/udp]
+  - [ufw, allow, 15777/udp]
+  - [docker-compose, -f ,/home/satisfactory/docker-compose.yml, up]
+
+
+
+
+
